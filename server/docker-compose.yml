@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # Servicio de Identificación y Señalización de RustDesk
+  hbbs:
+    container_name: rustdesk-hbbs
+    image: rustdesk/rustdesk-server:latest
+    command: hbbs -r 0.0.0.0:21117 -k _
+    volumes:
+      - ./data:/root
+    network_mode: "host"
+    restart: unless-stopped
+    depends_on:
+      - hbbr
+
+  # Servicio de Retransmisión (Relay) de RustDesk
+  hbbr:
+    container_name: rustdesk-hbbr
+    image: rustdesk/rustdesk-server:latest
+    command: hbbr -k _
+    volumes:
+      - ./data:/root
+    network_mode: "host"
+    restart: unless-stopped
+
+  # API Backend de Ingestión y Dashboard de Supervisión
+  api-dashboard:
+    container_name: rustdesk-audit-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./db_data:/app/data
+      - ./screenshots:/app/screenshots
+    restart: unless-stopped
+    environment:
+      - API_TOKEN=SECRET_TOKEN_UPT_2026

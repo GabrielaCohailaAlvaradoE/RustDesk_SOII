@@ -1,0 +1,23 @@
+# Python y caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Entornos virtuales
+venv/
+env/
+.venv/
+
+# Bases de datos y archivos temporales generados en ejecucion
+server/data/
+server/db_data/
+server/screenshots/
+*.db
+offline_buffer.db
+agent_activity.log
+
+# Build artifacts (PyInstaller)
+dist/
+build/
+*.spec
